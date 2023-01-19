@@ -1,0 +1,19 @@
+clear all
+
+if "`c(username)'" == "Alexnewnham"{
+    cd "C:\Users\Alexnewnham\Dropbox\MobRes"
+}	
+else if "`c(username)'" == "alexnewnham"{
+    cd "C:\Users\alexnewnham\Dropbox\MobRes"
+}
+
+
+import delimited ".\cleaned_data\labor\dads_sa.csv"
+drop v1
+ 
+reg wph age_gr##age_gr i.zempt i.year
+
+// Not sure I really want 
+predict exp_wph
+
+collapse (first) exp_wph, by(year zempt age_gr)

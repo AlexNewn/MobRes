@@ -1,0 +1,129 @@
+%! Author = alexnewnham
+%! Date = 17/01/2023
+
+% Preamble
+\documentclass[12pt]{article}
+
+% Packages
+\usepackage{natbib}
+\usepackage{amsmath}
+
+% Document
+\begin{document}
+
+    \section{Introduction}\label{sec:introduction}
+    Since the new millennium, economic inequalities between regions have been increasing in the European
+    Union\citep{iammarino2019regional}.
+    This problem does not only concern the European Union, but also other developed countries.
+    In the United States, for example, after a century of interstate income convergence, the rate of convergence was
+    cut in half in the period 1990-2010\citep{ganong2017has}.
+    Across the developed world, discontent has grown in territories affected by economic stagnation, or sometimes
+    even decline\citep{rodriguez2020institutions}.
+    ``The Geography of Discontent'' refers to this growing geographic dissatisfaction\citep{dijkstra2020geography}.
+    In recent years, this sense of discontent has had a political impact in many developed
+    countries\citep{organisation2019oecd}.
+    The percentage of votes for parties strongly opposed to European integration increased from 10 percent to 18
+    percent between 2000 and 2018\citep{dijkstra2020geography}.
+    This increase is mainly due to regions affected by economic and industrial decline.
+    Within these, there are low levels of education and little employment opportunities\citep{becker2017voted}.
+    While the wave of discontent that is affecting many developed countries undoubtedly has a spatial dimension,
+    current theoretical models of geographic
+    economics struggle to explain and understand it. \\
+
+    To some extent, the situation seems to defy standard economic mechanisms.
+    In particular, while mobility is seen as a means of reducing disparities, it seems to be running out of steam in
+    several developed countries.
+    In France, for example, people are less likely to move and, if they do, they will move to places closer than they
+    did 30 years ago.
+    ~\cite{hsieh2019housing} and\cite{ganong2017has}, among others,suggest that making it easier for people living on
+    the outskirts of large cities to move would provide better opportunities and help reduce
+    discontent.
+    The functioning of the housing market and housing policies, which affect mobility, play a central role.
+    Different arguments are made by different authors.
+    They emphasize that low rates of internal migration are due to the lack of opportunities for unskilled workers in
+    urban areas.
+    In their view,lower housing prices in urban centers would only drain the remaining skilled workers from the
+    declining areas.
+    This debate highlights the need to better understand which factors influence which agents to migrate.
+
+    The importance of analyzing the microeconomic foundations of internal migration choices goes beyond the debate
+    mentioned above.
+    The mobility of agents is central to the new geographic economy, which is what distinguishes it from the
+    international economy\citep{redding2017quantitative}.
+    Recently, the need to understand interregional migration has increased due to more refined spatial models.
+    A new generation of flexible models capable of providing clear policy recommendations has emerged.
+    Unfortunately, agent mobility is often exogenously assumed to be perfect and costless, or non-existent (e.g.,
+    ~\cite{davis2012spatial}).
+    In these models, the spatial distribution is more nuanced, with agents responding to a wider variety of factors,
+    including environmental amenities\citep{storper2018separate}.
+    Environmental amenities represent the positive and freely available elements that locations offer.
+    Examples are temperature, access to the sea or local gastronomy.
+    Although it is an important step forward to include them, these models currently lack a microeconomic basis for
+    migration.
+    This is problematic because the weights of environmental amenities in the utility of agents are difficult to
+    quantify.
+    They are therefore estimated in such a way as to equalize the utilities of agents in the space.
+    The consequence is that agents unable to migrate can be mistaken for agents with strong preferences to stay in
+    that location\citep{desmet2018geography}.
+    In other words, this is tantamount to considering that ``those who remain'' in declining territories do so only for
+    love of their land.
+    To avoid this,~\cite{desmet2018geography} incorporate mobility costs into their model.
+    The development of microeconomic foundations describing internal migration will aim to support spatial models by
+    providing quantitative clues about the costs of migration, the factors that influence their decisions and their
+    interactions with heterogeneous agents.
+    The need to quantify the relative effect of different economic policies on the nature, character, and magnitude
+    of internal migration, as well as to identify the factors that influence an individual's decision to move to
+    different regions, was already expressed in\cite{todaro1976internal}.
+
+
+    \section{Methodology}\label{sec:methodology}
+    We model migration decisions between different regions for different types of workers.
+    Each region differs in its average wage per sector.
+    The workers are fully informed on the different wages they are expected to receive in the different regions.
+    With this information that make an estimation on the future gains that will be received in the different regions.
+    These predictions are the same for all individuals.
+    After taking into account the discounted sum of gains, the costs related to each region and the cost of migration
+    they decide on where to live in the next period.
+    They then update the information the following year and make again a new decision based on the updated wages and
+    costs.
+
+    \subsection*{Model}
+
+    We consider individuals \textit{i} working in different sectors \textit{j} and living in different commuting
+    zones \textit{z}.
+    The utility for each individual can be written as :
+    \begin{equation}\label{eq:utility function}
+    \begin{aligned}
+    U_{i t}(x_{i t}, z_{i t}, z_{i t-1}) =  & \hspace{1mm} \delta \ln w_{i t}(x_{i t}, z_{i t})- \mathbb{I}_{\{z_{t} \neq z_{t-1}\}}\Delta + \epsilon  \\
+    \end{aligned}
+    \end{equation}
+
+    In each period, they look at the average wages in each region Z for their sector $\psi_{0 z t}$ for $\forall z
+    \in Z$.
+    With this information they predict their wages until their retirement for each region with the following formula:\\
+    \begin{equation}\label{eq:forcasting earning function}
+    \begin{aligned}
+    \ln w_{i z t+j}=\psi_{0 z t}+\psi_1 x_{i t+j}^{2}+\eta_{i z t+j}
+    \end{aligned}
+    \end{equation}
+
+
+
+    \subsection*{Estimation and identification}
+    \subsection*{Model fit}
+
+
+    \section{Datasets}\label{sec:datasets}
+
+
+    \section{Results}\label{sec:results}
+
+
+    \section{Conclusion}\label{sec:conclusion}
+
+    \newpage
+    {
+        \bibliography{main}
+        \bibliographystyle{chicago}
+    }
+\end{document}
