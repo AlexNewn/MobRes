@@ -1,0 +1,74 @@
+S6CDI -- what is kept / dropped from the old scripts            28/10/2026
+=====================================================================
+
+1. NEW DEFINITION (s6cdi.py)
+----------------------------
+Event year t = an_layoff (S4 candidate SIRET, unchanged). A worker is displaced if
+her/his MAIN JOB (highest s_brut) in t-1 is at the candidate SIRET and:
+  cdi_condition         contrat_travail == '01' AND datfin_f >= 360 on that job
+  occupation_condition  cs2_f (corrected, 2 digits) of that job in
+                        34 35 37 38 42 43 46 47 48 52 53 54 55 56 62 63 64 65 67 68
+  no_return_condition   no spell at the firm (siren of the t-1 job) in t+1..t+3
+Nothing is required in t (may or may not be at the firm, even on 31 Dec t).
+First event per worker kept (KEEP_FIRST_LAYOFF), as in S6.
+
+Run (after S6 has produced panel_dads/main_job_*.parquet with cs2_f):
+  python s6cdi.py              -> panel_dads/panel_roster_cdi.parquet,
+                                  panel_displaced_cdi.parquet, reports/s6cdi.log
+  python s6cdi.py --switch     -> panel_dads/switch_roster_cdi.parquet,
+                                  panel_switch_cdi.parquet, reports/s6switch_cdi.log
+Crash: CRASH_s6cdi.log. Roster files are cached: delete them to recompute.
+Put s6cdi.py in the same folder as s6_panel_displaced.py (it imports it).
+
+2. KEPT, REUSED AS IS (imported from s6_panel_displaced.py / ml_rules.py)
+-------------------------------------------------------------------------
+Stage A  parse_panel and everything it calls: panel_raw_{year}.parquet
+         (normalise_chunk, relabel_ids13/relabel_panel, add_wage_outlier, checks)
+Stage B  derive_main_job, correct_cs2_panel -> main_job_{year}.parquet
+         (contrat_travail, datfin_f, cs2_f, siren, siret13 are read from here)
+Stage C  _main_job_path, _panel_raw_path, _scan_panel, _spell_at_firm (no-return)
+Stage D  build_final_panel, align_to_s5, s5_job_columns, main() (unchanged logic:
+         7-year grid, *_at_ml columns, density join on comr)
+ml_rules SPELL_AT_ML, CAND_AT_ML, YEAR_END_MIN_DAY (=360), panel_order
+S4       candidate_establishments.parquet (event definition unchanged, "the rest
+         is identical"); S1b id maps; S2 commune density; config.py; paths_v2.py;
+         pipeline_utils.py.
+
+3. NOT USED BY S6CDI (stay in the files, not to be deleted unless you want to)
+------------------------------------------------------------------------------
+s6_panel_displaced.py
+  - build_roster (old)           replaced by s6cdi.build_roster
+  - panel_leavers                S4-type leaver rule (31 Dec t-1 / 31 Dec t): dropped
+  - _same_firm_flag              t-2 same firm (tenure proxy): dropped
+  - any_job_firm_t0 / stable_job_condition: dropped
+  - CS1_KEEP / cs1_f occupation rule: replaced by the cs2_f list
+s6b_panel_displaced.py           entirely replaced by `s6cdi.py --switch`
+ml_rules.employed_at_year_end, firm_leavers   still used by S4 only
+config: AGE_MIN/MAX, CS1_KEEP, DISPLACED_MIN_TENURE_YEARS, DISPLACED_FULLTIME_ONLY,
+        DISPLACED_NO_RETURN_SIREN   unused by s6cdi (already unused by S6)
+S5 / S5b                         untouched, not part of the CDI sample.
+
+Safe to delete from the repo (only if you retire the old definition): the old
+build_roster / panel_leavers / _same_firm_flag in S6 and s6b. Recommendation: keep
+them until the CDI sample is validated.
+
+4. POINTS TO CHECK ON THE REAL DATA
+-----------------------------------
+a) contrat_travail availability: the roster log prints n_contrat_null. If the field is
+   empty before some year, no event can pass the CDI condition in those cohorts.
+b) Format of contrat_travail: the code compares the stripped string to '01'.
+c) cs2_f must be a 2-character string ('34'); if numeric, change OCC_CODES.
+d) CDI is tested on the MAIN job only (agreed). A worker whose CDI at the SIRET is
+   not the main job is excluded.
+e) S4 events were selected with the OLD leaver rule (n_exit_firm >= 25,
+   exit_share_firm >= 0.30, reclustering) computed on workers present on 31 Dec t-1
+   and absent from the firm on 31 Dec t. The events are kept as is; the worker-level
+   definition is now different from the one used to select events.
+f) First event per worker is applied BEFORE the conditions (as in S6), so a worker
+   whose first event fails a condition is not retried on a later event.
+g) no_return looks at t+1..t+3 only (PANEL_POST_YEARS); someone returning later is kept.
+h) Switch sample: roster pre-filtered on CDI + occupation (no firm-size/drop rule, no
+   t condition), then no-return. Expect a very large sample.
+i) EDA: eda_s6_choices.py reads panel_displaced.parquet / panel_switch.parquet
+   (PANELS_S6). Point it to *_cdi.parquet (or copy the files) to run the EDA on the
+   new sample; not changed here.
