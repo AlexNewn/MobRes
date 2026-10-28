@@ -27,13 +27,13 @@ import s6_panel_displaced as s6
 from config import OUT_DIR, ML_LAST_YEAR, PANEL_POST_YEARS, KEEP_FIRST_LAYOFF
 from paths_v2 import out_candidate_estab, stage_log_path, out_tmp_dir
 from pipeline_utils import atomic_write_parquet
+from cs2_rule import CS2_STRICT
 from ml_rules import CAND_AT_ML, SPELL_AT_ML, YEAR_END_MIN_DAY
 
 SWITCH = "--switch" in sys.argv
 TAG = "switch_cdi" if SWITCH else "cdi"
 CDI = "01"
-OCC_CODES = ["34", "35", "37", "38", "42", "43", "46", "47", "48", "52", "53", "54", "55",
-             "56", "62", "63", "64", "65", "67", "68"]
+OCC_CODES = CS2_STRICT          # the 20 codes (strings, e.g. "34"): cs2_rule.CS2_STRICT
 CONDS = ["cdi_condition", "occupation_condition", "no_return_condition"]
 ROSTER = os.path.join(s6.PANEL_OUT_DIR, f"{'switch' if SWITCH else 'panel'}_roster_cdi.parquet")
 # the sample is a different file from S6 / S6b: same stages, other output names

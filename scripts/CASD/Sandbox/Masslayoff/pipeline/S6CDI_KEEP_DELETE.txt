@@ -57,7 +57,8 @@ them until the CDI sample is validated.
 a) contrat_travail availability: the roster log prints n_contrat_null. If the field is
    empty before some year, no event can pass the CDI condition in those cohorts.
 b) Format of contrat_travail: the code compares the stripped string to '01'.
-c) cs2_f must be a 2-character string ('34'); if numeric, change OCC_CODES.
+c) cs2 / cs2_f are strings (S1 and s1b use .str.slice). The 20 codes are imported from
+   cs2_rule.CS2_STRICT (identical list), so s6cdi.py needs cs2_rule.py in the same folder.
 d) CDI is tested on the MAIN job only (agreed). A worker whose CDI at the SIRET is
    not the main job is excluded.
 e) S4 events were selected with the OLD leaver rule (n_exit_firm >= 25,
